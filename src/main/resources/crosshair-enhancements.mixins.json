@@ -1,0 +1,17 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "me.catsflex.${mod_package_id}.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"client": [
+		"AttackIndicatorMixin",
+		"CrosshairMixin",
+		"GameRendererMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

@@ -1,0 +1,47 @@
+plugins {
+	id "fabric-loom" version "${fabric_loom_version}"
+}
+
+def javaVersion = 21
+version = project.mod_version
+group = project.maven_group
+
+remapJar {
+	archiveFileName.set("${project.mod_id}-${project.mod_version}+mc${project.minecraft_version}-fabric.jar")
+}
+
+repositories {
+	maven { url = "https://maven.terraformersmc.com/releases/" }
+	maven { url = "https://maven.isxander.dev/releases" }
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings loom.officialMojangMappings()
+	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+	modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}"
+}
+
+processResources {
+	def allowedPrefixes = ["mod_", "fabric_", "minecraft_", "modmenu_", "yacl_", "maven_"]
+	def props = project.properties.findAll { key, value ->
+		key instanceof String && (allowedPrefixes.any { key.startsWith(it) })
+	}
+	
+	inputs.properties(props)
+	
+	filesMatching("*.json") {
+		expand props
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.encoding = "UTF-8"
+	it.options.release.set(javaVersion)
+}
+
+java {
+	toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)
+}
