@@ -15,9 +15,9 @@ public class GameRendererMixin {
 	)
 	private boolean bypassFirstPersonCheck(boolean isFirstPerson) {
 		final var config = ModConfig.getInstance();
-		if (!config.isEnabled) return isFirstPerson;
+		if (!config.isEnabled.get()) return isFirstPerson;
 		
 		// Same logic as during crosshair rendering.
-		return isFirstPerson || config.shouldShowInThirdPerson;
+		return isFirstPerson || config.shouldShowInThirdPerson.get();
 	}
 }

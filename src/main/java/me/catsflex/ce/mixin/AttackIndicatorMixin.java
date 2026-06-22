@@ -24,7 +24,7 @@ public class AttackIndicatorMixin {
 	)
 	private float forceIndicatorForNonWeapons(float originalDelay) {
 		final var config = ModConfig.getInstance();
-		if (!config.isEnabled || !config.hasIndicatorForNonWeapons) return originalDelay;
+		if (!config.isEnabled.get() || !config.hasIndicatorForNonWeapons.get()) return originalDelay;
 		
 		// A weird Minecraft quirk.
 		// The game calculates the current item's attack delay in ticks using this formula: MAX_TPS / ATTACK_SPEED.
@@ -42,7 +42,7 @@ public class AttackIndicatorMixin {
 	)
 	private float modifyIndicatorThreshold(float originalCharge) {
 		final var config = ModConfig.getInstance();
-		if (!config.isEnabled || !config.shouldUseResponsiveIndicator) return originalCharge;
+		if (!config.isEnabled.get() || !config.shouldUseResponsiveIndicator.get()) return originalCharge;
 		
 		// Minecraft allows to perform full-charged hits,
 		// when the weapon's charge has surpassed 90% (the minimum threshold).
@@ -62,12 +62,12 @@ public class AttackIndicatorMixin {
 	)
 	private void customIndicatorIcons(GuiGraphics guiGraphics, RenderPipeline pipeline, Identifier sprite, int x, int y, int width, int height, Operation<Void> original) {
 		final var config = ModConfig.getInstance();
-		if (!config.isEnabled) {
+		if (!config.isEnabled.get()) {
 			original.call(guiGraphics, pipeline, sprite, x, y, width, height);
 			return;
 		}
 		
-		RenderUtil.renderSprite(guiGraphics, sprite, x, y, width, height, config.shouldIndicatorUseBlending, config.indicatorOpacity);
+		RenderUtil.renderSprite(guiGraphics, sprite, x, y, width, height, config.shouldIndicatorUseBlending.get(), config.indicatorOpacity.get());
 	}
 	
 	@WrapOperation(
@@ -83,11 +83,11 @@ public class AttackIndicatorMixin {
 		Operation<Void> original
 	) {
 		final var config = ModConfig.getInstance();
-		if (!config.isEnabled) {
+		if (!config.isEnabled.get()) {
 			original.call(guiGraphics, pipeline, sprite, sourceWidth, sourceHeight, cropX, cropY, screenX, screenY, renderWidth, renderHeight);
 			return;
 		}
 		
-		RenderUtil.renderSprite(guiGraphics, sprite, sourceWidth, sourceHeight, cropX, cropY, screenX, screenY, renderWidth, renderHeight, config.shouldIndicatorUseBlending, config.indicatorOpacity);
+		RenderUtil.renderSprite(guiGraphics, sprite, sourceWidth, sourceHeight, cropX, cropY, screenX, screenY, renderWidth, renderHeight, config.shouldIndicatorUseBlending.get(), config.indicatorOpacity.get());
 	}
 }

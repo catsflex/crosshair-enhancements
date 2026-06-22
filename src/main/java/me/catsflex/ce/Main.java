@@ -11,7 +11,7 @@ public class Main implements ModInitializer {
 	
 	@Override
 	public void onInitialize() {
-		ModConfig.load();
+		ModConfig.getInstance().load();
 		LOGGER.info("Mod initialized successfully!");
 	}
 }

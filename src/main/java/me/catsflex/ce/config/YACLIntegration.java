@@ -1,10 +1,11 @@
 package me.catsflex.ce.config;
 
 import dev.isxander.yacl3.api.*;
-import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
-import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder;
-import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
-import me.catsflex.ce.Main;
+import dev.isxander.yacl3.api.controller.*;
+import me.catsflex.ce.config.option.BooleanOption;
+import me.catsflex.ce.config.option.ColorOption;
+import me.catsflex.ce.config.option.FloatOption;
+import me.catsflex.ce.config.option.IntegerOption;
 import net.minecraft.client.AttackIndicatorStatus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.debug.DebugScreenEntries;
@@ -12,93 +13,60 @@ import net.minecraft.client.gui.components.debug.DebugScreenEntryStatus;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
+import java.awt.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class YACLIntegration {
-	private static final String _PREFIX = "config." + Main.MOD_ID;
 	
 	public static Screen createScreen(Screen parent) {
 		var config = ModConfig.getInstance();
 		var vanillaOptions = Minecraft.getInstance().options;
 		
-		var enabledOption = createBooleanTickBoxOption("enabled", ModConfig.DEFAULT_IS_ENABLED,
-			() -> config.isEnabled, v -> config.isEnabled = v);
+		var attackIndicatorOption = createVanillaEnumOption(
+			"options.attackIndicator",
+			"attackIndicator",
+			AttackIndicatorStatus.CROSSHAIR,
+			() -> vanillaOptions.attackIndicator().get(),
+			v -> {
+				vanillaOptions.attackIndicator().set(v);
+				vanillaOptions.save();
+			},
+			AttackIndicatorStatus.class,
+			AttackIndicatorStatus::caption
+		);
 		
-		var thirdPersonOption = createBooleanTickBoxOption("third-person", ModConfig.DEFAULT_SHOULD_SHOW_IN_THIRD_PERSON,
-			() -> config.shouldShowInThirdPerson, v -> config.shouldShowInThirdPerson = v);
-		var spectatorOption = createBooleanTickBoxOption("spectator", ModConfig.DEFAULT_SHOULD_SHOW_IN_SPECTATOR,
-			() -> config.shouldShowInSpectator, v -> config.shouldShowInSpectator = v);
-		var debugCrosshairOption = Option.<DebugScreenEntryStatus>createBuilder()
-			.name(Component.translatable(getKey(KeyType.OPTION, "debug-crosshair") + ".name"))
-			.description(OptionDescription.of(Component.translatable(getKey(KeyType.OPTION, "debug-crosshair") + ".description")))
-			.binding(
-				DebugScreenEntryStatus.IN_OVERLAY,
-				() -> Minecraft.getInstance().debugEntries.getStatus(DebugScreenEntries.THREE_DIMENSIONAL_CROSSHAIR),
-				newValue -> Minecraft.getInstance().debugEntries.setStatus(DebugScreenEntries.THREE_DIMENSIONAL_CROSSHAIR, newValue)
-			)
-			.controller(opt -> EnumControllerBuilder.create(opt)
-				.enumClass(DebugScreenEntryStatus.class)
-				.formatValue(name -> Component.translatable(getKey(KeyType.OPTION, "debug-crosshair") + "." + name.getSerializedName()))
-			)
-			.build();
-		
-		var crosshairBlendingOption = createBooleanTickBoxOption("crosshair-blending", ModConfig.DEFAULT_SHOULD_CROSSHAIR_USE_BLENDING,
-			() -> config.shouldCrosshairUseBlending, v -> config.shouldCrosshairUseBlending = v);
-		var crosshairOpacityOption = createFloatSliderOption("crosshair-opacity", ModConfig.DEFAULT_CROSSHAIR_OPACITY,
-			ConfigValidator.LIMIT_OPACITY_MIN, ConfigValidator.LIMIT_OPACITY_MAX, 0.01F,
-			() -> config.crosshairOpacity, v -> config.crosshairOpacity = v);
-		
-		var indicatorBlendingOption = createBooleanTickBoxOption("indicator-blending", ModConfig.DEFAULT_SHOULD_INDICATOR_USE_BLENDING,
-			() -> config.shouldIndicatorUseBlending, v -> config.shouldIndicatorUseBlending = v);
-		var indicatorOpacityOption = createFloatSliderOption("indicator-opacity", ModConfig.DEFAULT_INDICATOR_OPACITY,
-			ConfigValidator.LIMIT_OPACITY_MIN, ConfigValidator.LIMIT_OPACITY_MAX, 0.01F,
-			() -> config.indicatorOpacity, v -> config.indicatorOpacity = v);
-		var indicatorForNonWeaponsOption = createBooleanTickBoxOption("indicator-for-non-weapons", ModConfig.DEFAULT_HAS_INDICATOR_FOR_NON_WEAPONS,
-			() -> config.hasIndicatorForNonWeapons, v -> config.hasIndicatorForNonWeapons = v);
-		var responsiveIndicatorOption = createBooleanTickBoxOption("responsive-indicator", ModConfig.DEFAULT_SHOULD_USE_RESPONSIVE_INDICATOR,
-			() -> config.shouldUseResponsiveIndicator, v -> config.shouldUseResponsiveIndicator = v);
-		var attackIndicatorOption = Option.<AttackIndicatorStatus>createBuilder()
-			.name(Component.translatable("options.attackIndicator"))
-			.description(OptionDescription.of(Component.translatable("config.crosshair-enhancements.option.attackIndicator.description")))
-			.binding(
-				AttackIndicatorStatus.CROSSHAIR,
-				() -> vanillaOptions.attackIndicator().get(),
-				v -> {
-					vanillaOptions.attackIndicator().set(v);
-					vanillaOptions.save();
-				}
-			)
-			.controller(opt -> EnumControllerBuilder.create(opt)
-				.enumClass(AttackIndicatorStatus.class)
-				.formatValue(AttackIndicatorStatus::caption)
-			)
-			.build();
+		var debugCrosshairOption = createDebugOverlayOption(
+			"debugCrosshair",
+			DebugScreenEntryStatus.IN_OVERLAY,
+			() -> Minecraft.getInstance().debugEntries.getStatus(DebugScreenEntries.THREE_DIMENSIONAL_CROSSHAIR),
+			newValue -> Minecraft.getInstance().debugEntries.setStatus(DebugScreenEntries.THREE_DIMENSIONAL_CROSSHAIR, newValue)
+		);
 		
 		return YetAnotherConfigLib.createBuilder().title(createTitle())
 			
 			.category(createCategory("general")
 				
 				.group(createGroup("main")
-					.option(enabledOption)
+					.option(createBooleanTickBoxOption(config.isEnabled))
 					.build())
 				
 				.group(createGroup("common")
-					.option(thirdPersonOption)
-					.option(spectatorOption)
+					.option(createBooleanTickBoxOption(config.shouldShowInThirdPerson))
+					.option(createBooleanTickBoxOption(config.shouldShowInSpectator))
 					.option(debugCrosshairOption)
 					.build())
 				
 				.group(createGroup("crosshair")
-					.option(crosshairBlendingOption)
-					.option(crosshairOpacityOption)
+					.option(createBooleanTickBoxOption(config.shouldCrosshairUseBlending))
+					.option(createFloatSliderOption(config.crosshairOpacity, 0.01F))
 					.build())
 				
 				.group(createGroup("attack-indicator")
-					.option(indicatorBlendingOption)
-					.option(indicatorOpacityOption)
-					.option(indicatorForNonWeaponsOption)
-					.option(responsiveIndicatorOption)
+					.option(createBooleanTickBoxOption(config.shouldIndicatorUseBlending))
+					.option(createFloatSliderOption(config.indicatorOpacity, 0.01F))
+					.option(createBooleanTickBoxOption(config.hasIndicatorForNonWeapons))
+					.option(createBooleanTickBoxOption(config.shouldUseResponsiveIndicator))
 					.option(attackIndicatorOption)
 					.build())
 				
@@ -109,45 +77,93 @@ public class YACLIntegration {
 			.generateScreen(parent);
 	}
 	
-	private static Option<Float> createFloatSliderOption(String relativeKey, float defaultValue, float minValue, float maxValue, float step, Supplier<Float> getter, Consumer<Float> setter) {
-		var key = getKey(KeyType.OPTION, relativeKey);
+	private static Option<Integer> createIntegerSliderOption(IntegerOption option, int step) {
+		final var key = KeyType.OPTION.buildKey(option.getKey());
 		
-		return Option.<Float>createBuilder()
+		return Option.<Integer>createBuilder()
 			.name(Component.translatable(key + ".name"))
 			.description(OptionDescription.of(Component.translatable(key + ".description")))
-			.binding(defaultValue, getter, setter)
-			.controller(opt -> FloatSliderControllerBuilder.create(opt)
-				.range(minValue, maxValue)
+			.binding(option.getDefault(), option::get, option::set)
+			.controller(opt -> IntegerSliderControllerBuilder.create(opt)
+				.range(option.getMin(), option.getMax())
 				.step(step)
-				.formatValue(v -> Component.literal(Math.round(v * 100.0F) + "%"))
 			)
 			.build();
 	}
 	
-	private static Option<Boolean> createBooleanTickBoxOption(String relativeKey, boolean defaultValue, Supplier<Boolean> getter, Consumer<Boolean> setter) {
-		var key = getKey(KeyType.OPTION, relativeKey);
+	private static Option<Float> createFloatSliderOption(FloatOption option, float step) {
+		final var key = KeyType.OPTION.buildKey(option.getKey());
+		
+		return Option.<Float>createBuilder()
+			.name(Component.translatable(key + ".name"))
+			.description(OptionDescription.of(Component.translatable(key + ".description")))
+			.binding(option.getDefault(), option::get, option::set)
+			.controller(opt -> FloatSliderControllerBuilder.create(opt)
+				.range(option.getMin(), option.getMax())
+				.step(step)
+			)
+			.build();
+	}
+	
+	private static Option<Color> createColorOption(ColorOption option, boolean hasAlpha) {
+		final var key = KeyType.OPTION.buildKey(option.getKey());
+		
+		return Option.<Color>createBuilder()
+			.name(Component.translatable(key + ".name"))
+			.description(OptionDescription.of(Component.translatable(key + ".description")))
+			.binding(option.getDefault(), option::get, option::set)
+			.controller(opt -> ColorControllerBuilder.create(opt).allowAlpha(hasAlpha))
+			.build();
+	}
+	
+	private static Option<Boolean> createBooleanTickBoxOption(BooleanOption option) {
+		final var key = KeyType.OPTION.buildKey(option.getKey());
 		
 		return Option.<Boolean>createBuilder()
 			.name(Component.translatable(key + ".name"))
 			.description(OptionDescription.of(Component.translatable(key + ".description")))
-			.binding(defaultValue, getter, setter)
+			.binding(option.getDefault(), option::get, option::set)
 			.controller(TickBoxControllerBuilder::create)
 			.build();
 	}
 	
+	private static Option<DebugScreenEntryStatus> createDebugOverlayOption(String relativeKey, DebugScreenEntryStatus defaultValue, Supplier<DebugScreenEntryStatus> getter, Consumer<DebugScreenEntryStatus> setter) {
+		final var key = KeyType.DEBUG_OVERLAY_OPTION.buildKey(relativeKey);
+		
+		return Option.<DebugScreenEntryStatus>createBuilder()
+			.name(Component.translatable(key + ".name"))
+			.description(OptionDescription.of(Component.translatable(key + ".description")))
+			.binding(defaultValue, getter, setter)
+			.controller(opt -> EnumControllerBuilder.create(opt)
+				.enumClass(DebugScreenEntryStatus.class)
+				.formatValue(name -> Component.translatable(key + "." + name.getSerializedName()))
+			)
+			.build();
+	}
+	
+	private static <T extends Enum<T>> Option<T> createVanillaEnumOption(String vanillaNameKey, String relativeKey, T defaultValue, Supplier<T> getter, Consumer<T> setter, Class<T> enumClass, ValueFormatter<T> valueFormatter) {
+		final var descriptionKey = KeyType.VANILLA_OPTION.buildKey(relativeKey) + ".description";
+		
+		return Option.<T>createBuilder()
+			.name(Component.translatable(vanillaNameKey))
+			.description(OptionDescription.of(Component.translatable(descriptionKey)))
+			.binding(defaultValue, getter, setter)
+			.controller(opt -> EnumControllerBuilder.create(opt)
+				.enumClass(enumClass)
+				.formatValue(valueFormatter)
+			)
+			.build();
+	}
+	
 	private static OptionGroup.Builder createGroup(String groupRelativeKey) {
-		return OptionGroup.createBuilder().name(Component.translatable(getKey(KeyType.GROUP, groupRelativeKey)));
+		return OptionGroup.createBuilder().name(Component.translatable(KeyType.GROUP.buildKey(groupRelativeKey)));
 	}
 	
 	private static ConfigCategory.Builder createCategory(String categoryRelativeKey) {
-		return ConfigCategory.createBuilder().name(Component.translatable(getKey(KeyType.CATEGORY, categoryRelativeKey)));
+		return ConfigCategory.createBuilder().name(Component.translatable(KeyType.CATEGORY.buildKey(categoryRelativeKey)));
 	}
 	
 	private static Component createTitle() {
-		return Component.translatable(_PREFIX + ".title");
-	}
-	
-	private static String getKey(KeyType type, String relativeKey) {
-		return _PREFIX + "." + type.getValue() + "." + relativeKey;
+		return Component.translatable(KeyType.getTitleKey());
 	}
 }

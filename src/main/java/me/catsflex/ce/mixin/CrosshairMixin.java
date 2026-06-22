@@ -29,10 +29,10 @@ public abstract class CrosshairMixin {
 	)
 	private boolean bypassFirstPersonCheck(boolean isFirstPerson) {
 		final var config = ModConfig.getInstance();
-		if (!config.isEnabled) return isFirstPerson;
+		if (!config.isEnabled.get()) return isFirstPerson;
 		
 		// Make the game think we're ALWAYS in first person mode & render the crosshair.
-		return isFirstPerson || config.shouldShowInThirdPerson;
+		return isFirstPerson || config.shouldShowInThirdPerson.get();
 	}
 	
 	@ModifyReturnValue(
@@ -41,10 +41,10 @@ public abstract class CrosshairMixin {
 	)
 	private boolean bypassSpectatorCheck(boolean canRender) {
 		final var config = ModConfig.getInstance();
-		if (!config.isEnabled) return canRender;
+		if (!config.isEnabled.get()) return canRender;
 		
 		// Make the game think it should ALWAYS render the crosshair in spectator game mode.
-		return canRender || config.shouldShowInSpectator;
+		return canRender || config.shouldShowInSpectator.get();
 	}
 	
 	@WrapOperation(
@@ -53,7 +53,7 @@ public abstract class CrosshairMixin {
 	)
 	private void customCrosshairRenderLogic(GuiGraphics guiGraphics, RenderPipeline pipeline, Identifier sprite, int x, int y, int width, int height, Operation<Void> original) {
 		final var config = ModConfig.getInstance();
-		if (!config.isEnabled) {
+		if (!config.isEnabled.get()) {
 			original.call(guiGraphics, pipeline, sprite, x, y, width, height);
 			return;
 		}
@@ -62,7 +62,7 @@ public abstract class CrosshairMixin {
 		guiGraphics.pose().pushMatrix();
 		
 		correctlyCenterCrosshair(guiGraphics);
-		RenderUtil.renderSprite(guiGraphics, CROSSHAIR_SPRITE, 0, 0, _CROSSHAIR_SIZE, _CROSSHAIR_SIZE, config.shouldCrosshairUseBlending, config.crosshairOpacity);
+		RenderUtil.renderSprite(guiGraphics, CROSSHAIR_SPRITE, 0, 0, _CROSSHAIR_SIZE, _CROSSHAIR_SIZE, config.shouldCrosshairUseBlending.get(), config.crosshairOpacity.get());
 		
 		guiGraphics.pose().popMatrix();
 	}
