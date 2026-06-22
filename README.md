@@ -25,6 +25,8 @@ I will go through these later:
 - **Show Full Indicator**: Renders or hides the full indicator based on set state.
 - **Smooth Indicator**: Interpolates the attack indicator's charging animation to match your client's framerate.
   This is especially noticeable for players using 32x or higher resolution resource packs.
+- **Show Crosshair in GUIs**: Renders the crosshair when you're in GUIs.
+  Useful for players with transparent menus.
 
 Stay tuned!
 
