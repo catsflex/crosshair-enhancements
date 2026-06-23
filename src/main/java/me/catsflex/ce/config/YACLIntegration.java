@@ -78,7 +78,7 @@ public class YACLIntegration {
 	}
 	
 	private static Option<Integer> createIntegerSliderOption(IntegerOption option, int step) {
-		final var key = KeyType.OPTION.buildKey(option.getKey());
+		final var key = ConfigKeyType.OPTION.buildKey(option.getKey());
 		
 		return Option.<Integer>createBuilder()
 			.name(Component.translatable(key + ".name"))
@@ -92,7 +92,7 @@ public class YACLIntegration {
 	}
 	
 	private static Option<Float> createFloatSliderOption(FloatOption option, float step) {
-		final var key = KeyType.OPTION.buildKey(option.getKey());
+		final var key = ConfigKeyType.OPTION.buildKey(option.getKey());
 		
 		return Option.<Float>createBuilder()
 			.name(Component.translatable(key + ".name"))
@@ -106,7 +106,7 @@ public class YACLIntegration {
 	}
 	
 	private static Option<Color> createColorOption(ColorOption option, boolean hasAlpha) {
-		final var key = KeyType.OPTION.buildKey(option.getKey());
+		final var key = ConfigKeyType.OPTION.buildKey(option.getKey());
 		
 		return Option.<Color>createBuilder()
 			.name(Component.translatable(key + ".name"))
@@ -117,7 +117,7 @@ public class YACLIntegration {
 	}
 	
 	private static Option<Boolean> createBooleanTickBoxOption(BooleanOption option) {
-		final var key = KeyType.OPTION.buildKey(option.getKey());
+		final var key = ConfigKeyType.OPTION.buildKey(option.getKey());
 		
 		return Option.<Boolean>createBuilder()
 			.name(Component.translatable(key + ".name"))
@@ -128,7 +128,7 @@ public class YACLIntegration {
 	}
 	
 	private static Option<DebugScreenEntryStatus> createDebugOverlayOption(String relativeKey, DebugScreenEntryStatus defaultValue, Supplier<DebugScreenEntryStatus> getter, Consumer<DebugScreenEntryStatus> setter) {
-		final var key = KeyType.DEBUG_OVERLAY_OPTION.buildKey(relativeKey);
+		final var key = ConfigKeyType.DEBUG_OVERLAY_OPTION.buildKey(relativeKey);
 		
 		return Option.<DebugScreenEntryStatus>createBuilder()
 			.name(Component.translatable(key + ".name"))
@@ -142,7 +142,7 @@ public class YACLIntegration {
 	}
 	
 	private static <T extends Enum<T>> Option<T> createVanillaEnumOption(String vanillaNameKey, String relativeKey, T defaultValue, Supplier<T> getter, Consumer<T> setter, Class<T> enumClass, ValueFormatter<T> valueFormatter) {
-		final var descriptionKey = KeyType.VANILLA_OPTION.buildKey(relativeKey) + ".description";
+		final var descriptionKey = ConfigKeyType.VANILLA_OPTION.buildKey(relativeKey) + ".description";
 		
 		return Option.<T>createBuilder()
 			.name(Component.translatable(vanillaNameKey))
@@ -156,14 +156,14 @@ public class YACLIntegration {
 	}
 	
 	private static OptionGroup.Builder createGroup(String groupRelativeKey) {
-		return OptionGroup.createBuilder().name(Component.translatable(KeyType.GROUP.buildKey(groupRelativeKey)));
+		return OptionGroup.createBuilder().name(Component.translatable(ConfigKeyType.GROUP.buildKey(groupRelativeKey)));
 	}
 	
 	private static ConfigCategory.Builder createCategory(String categoryRelativeKey) {
-		return ConfigCategory.createBuilder().name(Component.translatable(KeyType.CATEGORY.buildKey(categoryRelativeKey)));
+		return ConfigCategory.createBuilder().name(Component.translatable(ConfigKeyType.CATEGORY.buildKey(categoryRelativeKey)));
 	}
 	
 	private static Component createTitle() {
-		return Component.translatable(KeyType.getTitleKey());
+		return Component.translatable(ConfigKeyType.getTitleKey());
 	}
 }

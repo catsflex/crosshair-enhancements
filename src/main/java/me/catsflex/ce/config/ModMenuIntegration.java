@@ -9,6 +9,8 @@ public class ModMenuIntegration implements ModMenuApi {
 	
 	@Override
 	public ConfigScreenFactory<?> getModConfigScreenFactory() {
-		return FabricLoader.getInstance().isModLoaded(_YACL_MOD_ID) ? YACLIntegration::createScreen : parent -> null;
+		return FabricLoader.getInstance().isModLoaded(_YACL_MOD_ID)
+			? YACLIntegration::createScreen
+			: parent -> null;
 	}
 }

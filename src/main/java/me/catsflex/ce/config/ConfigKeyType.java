@@ -2,7 +2,7 @@ package me.catsflex.ce.config;
 
 import me.catsflex.ce.Main;
 
-public enum KeyType {
+public enum ConfigKeyType {
 	CATEGORY("category"),
 	GROUP("group"),
 	OPTION("option"),
@@ -12,7 +12,7 @@ public enum KeyType {
 	private static final String _PREFIX = "config." + Main.MOD_ID;
 	private final String _value;
 	
-	KeyType(String value) {
+	ConfigKeyType(String value) {
 		_value = value;
 	}
 	
