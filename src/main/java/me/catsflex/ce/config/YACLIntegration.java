@@ -20,8 +20,8 @@ import java.util.function.Supplier;
 public class YACLIntegration {
 	
 	public static Screen createScreen(Screen parent) {
-		var config = ModConfig.getInstance();
-		var vanillaOptions = Minecraft.getInstance().options;
+		final var config = ModConfig.getInstance();
+		final var vanillaOptions = Minecraft.getInstance().options;
 		
 		var attackIndicatorOption = createVanillaEnumOption(
 			"options.attackIndicator",

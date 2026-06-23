@@ -2,7 +2,7 @@
 	"required": true,
 	"minVersion": "0.8",
 	"package": "me.catsflex.${mod_package_id}.mixin",
-	"compatibilityLevel": "JAVA_21",
+	"compatibilityLevel": "JAVA_${java_version}",
 	"client": [
 		"AttackIndicatorMixin",
 		"CrosshairMixin",

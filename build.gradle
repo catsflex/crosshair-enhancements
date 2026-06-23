@@ -2,7 +2,7 @@ plugins {
 	id "fabric-loom" version "${fabric_loom_version}"
 }
 
-def javaVersion = 21
+def javaVersion = project.java_version as int
 version = project.mod_version
 group = project.maven_group
 
@@ -25,15 +25,35 @@ dependencies {
 }
 
 processResources {
-	def allowedPrefixes = ["mod_", "fabric_", "minecraft_", "modmenu_", "yacl_", "maven_"]
-	def props = project.properties.findAll { key, value ->
-		key instanceof String && (allowedPrefixes.any { key.startsWith(it) })
-	}
+	def replaceProperties = [
+		"mod_id": project.mod_id,
+		"mod_package_id": project.mod_package_id,
+		"mod_name": project.mod_name,
+		"mod_description": project.mod_description,
+		"mod_version": project.mod_version,
+		"mod_author": project.mod_author,
+		"mod_homepage_url": project.mod_homepage_url,
+		"mod_sources_url": project.mod_sources_url,
+		"mod_issues_url": project.mod_issues_url,
+		"mod_license": project.mod_license,
+		"maven_group": project.maven_group,
+		"java_version": project.java_version,
+		"minecraft_version": project.minecraft_version,
+		"fabric_loader_version": project.fabric_loader_version,
+		"fabric_loom_version": project.fabric_loom_version,
+		"fabric_api_version": project.fabric_api_version,
+		"modmenu_version": project.modmenu_version,
+		"yacl_version": project.yacl_version
+	]
 	
-	inputs.properties(props)
+	inputs.properties(replaceProperties)
 	
-	filesMatching("*.json") {
-		expand props
+	filesMatching([
+		"fabric.mod.json",
+		"**/*.mixins.json",
+		"assets/**/lang/*.json"
+	]) {
+		expand replaceProperties
 	}
 }
 
