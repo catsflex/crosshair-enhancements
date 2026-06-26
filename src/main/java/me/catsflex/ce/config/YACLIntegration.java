@@ -2,10 +2,8 @@ package me.catsflex.ce.config;
 
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
-import me.catsflex.ce.config.option.BooleanOption;
-import me.catsflex.ce.config.option.ColorOption;
-import me.catsflex.ce.config.option.FloatOption;
-import me.catsflex.ce.config.option.IntegerOption;
+import me.catsflex.ce.config.custom.IndicatorVisibilityStatus;
+import me.catsflex.ce.config.option.*;
 import net.minecraft.client.AttackIndicatorStatus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.debug.DebugScreenEntries;
@@ -15,6 +13,7 @@ import net.minecraft.network.chat.Component;
 
 import java.awt.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class YACLIntegration {
@@ -62,12 +61,14 @@ public class YACLIntegration {
 					.option(createFloatSliderOption(config.crosshairOpacity, 0.01F))
 					.build())
 				
-				.group(createGroup("attack-indicator")
+				.group(createGroup("attackIndicator")
 					.option(createBooleanTickBoxOption(config.shouldIndicatorUseBlending))
 					.option(createFloatSliderOption(config.indicatorOpacity, 0.01F))
+					.option(attackIndicatorOption)
 					.option(createBooleanTickBoxOption(config.hasIndicatorForNonWeapons))
 					.option(createBooleanTickBoxOption(config.shouldUseResponsiveIndicator))
-					.option(attackIndicatorOption)
+					.option(createBooleanTickBoxOption(config.shouldUseSmoothIndicator))
+					.option(createEnumOption(config.fullIndicatorVisibility, IndicatorVisibilityStatus::getStatus))
 					.build())
 				
 				.build())
@@ -101,6 +102,20 @@ public class YACLIntegration {
 			.controller(opt -> FloatSliderControllerBuilder.create(opt)
 				.range(option.getMin(), option.getMax())
 				.step(step)
+			)
+			.build();
+	}
+	
+	private static <T extends Enum<T>> Option<T> createEnumOption(EnumOption<T> option, Function<T, String> formatter) {
+		final var key = ConfigKeyType.OPTION.buildKey(option.getKey());
+		
+		return Option.<T>createBuilder()
+			.name(Component.translatable(key + ".name"))
+			.description(OptionDescription.of(Component.translatable(key + ".description")))
+			.binding(option.getDefault(), option::get, option::set)
+			.controller(opt -> EnumControllerBuilder.create(opt)
+				.enumClass(option.getEnumClass())
+				.formatValue(val -> Component.translatable(key + "." + formatter.apply(val)))
 			)
 			.build();
 	}

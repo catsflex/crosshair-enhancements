@@ -19,14 +19,21 @@
 	"config.crosshair-enhancements.option.shouldCrosshairUseBlending.description": "Включает режим наложения прицела. Выключите, чтобы видеть реальные цвета вашего прицела.",
 	"config.crosshair-enhancements.option.crosshairOpacity.name": "Непрозрачность прицела",
 	"config.crosshair-enhancements.option.crosshairOpacity.description": "Настраивает видимость прицела.",
-	"config.crosshair-enhancements.group.attack-indicator": "Индикатор атаки",
+	"config.crosshair-enhancements.group.attackIndicator": "Индикатор атаки",
 	"config.crosshair-enhancements.option.shouldIndicatorUseBlending.name": "Смешивание цветов индикатора",
 	"config.crosshair-enhancements.option.shouldIndicatorUseBlending.description": "Включает режим наложения индикатора. Выключите, чтобы видеть реальные цвета индикатора.",
 	"config.crosshair-enhancements.option.indicatorOpacity.name": "Непрозрачность индикатора",
 	"config.crosshair-enhancements.option.indicatorOpacity.description": "Настраивает видимость индикатора атаки.",
+	"config.crosshair-enhancements.vanillaOption.attackIndicator.description": "Меняет место, где отображается индикатор атаки.",
 	"config.crosshair-enhancements.option.hasIndicatorForNonWeapons.name": "Индикатор для предметов без урона",
 	"config.crosshair-enhancements.option.hasIndicatorForNonWeapons.description": "Отображает полный индикатор атаки для пустой руки и предметов, не являющихся оружием. Также исправляет визуальные баги индикатора при нестандартных значениях атрибута скорости атаки.",
 	"config.crosshair-enhancements.option.shouldUseResponsiveIndicator.name": "Отзывчивый индикатор",
 	"config.crosshair-enhancements.option.shouldUseResponsiveIndicator.description": "Отображает индикатор полностью заряженным, как только вы можете нанести удар с максимальным уроном. Минимальный порог заряда в Minecraft составляет 90%.",
-	"config.crosshair-enhancements.vanillaOption.attackIndicator.description": "Меняет место, где отображается индикатор атаки."
+	"config.crosshair-enhancements.option.shouldUseSmoothIndicator.name": "Плавный индикатор",
+	"config.crosshair-enhancements.option.shouldUseSmoothIndicator.description": "Делает анимацию заполнения индикатора атаки плавной. Это более заметно при использовании ресурс-паков с высоким разрешением.",
+	"config.crosshair-enhancements.option.fullIndicatorVisibility.name": "Отображение полного индикатора",
+	"config.crosshair-enhancements.option.fullIndicatorVisibility.description": "Определяет, когда должен отображаться полный индикатор атаки.",
+	"config.crosshair-enhancements.option.fullIndicatorVisibility.alwaysOn": "Всегда",
+	"config.crosshair-enhancements.option.fullIndicatorVisibility.targeted": "При наведении",
+	"config.crosshair-enhancements.option.fullIndicatorVisibility.never": "Никогда"
 }

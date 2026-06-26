@@ -5,8 +5,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import me.catsflex.ce.Main;
+import me.catsflex.ce.config.custom.IndicatorVisibilityStatus;
 import me.catsflex.ce.config.option.BooleanOption;
 import me.catsflex.ce.config.option.ConfigOption;
+import me.catsflex.ce.config.option.EnumOption;
 import me.catsflex.ce.config.option.FloatOption;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -33,6 +35,8 @@ public class ModConfig {
 	public final FloatOption indicatorOpacity = new FloatOption("indicatorOpacity", 1.0F, 0.0F, 1.0F);
 	public final BooleanOption hasIndicatorForNonWeapons = new BooleanOption("hasIndicatorForNonWeapons", false);
 	public final BooleanOption shouldUseResponsiveIndicator = new BooleanOption("shouldUseResponsiveIndicator", false);
+	public final BooleanOption shouldUseSmoothIndicator = new BooleanOption("shouldUseSmoothIndicator", false);
+	public final EnumOption<IndicatorVisibilityStatus> fullIndicatorVisibility = new EnumOption<>("fullIndicatorVisibility", IndicatorVisibilityStatus.TARGETED, IndicatorVisibilityStatus.class);
 	
 	private ModConfig() {}
 	

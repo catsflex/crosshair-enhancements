@@ -19,14 +19,21 @@
 	"config.crosshair-enhancements.option.shouldCrosshairUseBlending.description": "Toggles crosshair blending. Disable it to see actual crosshair colors.",
 	"config.crosshair-enhancements.option.crosshairOpacity.name": "Crosshair Opacity",
 	"config.crosshair-enhancements.option.crosshairOpacity.description": "Adjusts crosshair visibility.",
-	"config.crosshair-enhancements.group.attack-indicator": "Attack Indicator",
+	"config.crosshair-enhancements.group.attackIndicator": "Attack Indicator",
 	"config.crosshair-enhancements.option.shouldIndicatorUseBlending.name": "Indicator Blending",
 	"config.crosshair-enhancements.option.shouldIndicatorUseBlending.description": "Toggles indicator blending. Disable it to see actual indicator colors.",
 	"config.crosshair-enhancements.option.indicatorOpacity.name": "Indicator Opacity",
 	"config.crosshair-enhancements.option.indicatorOpacity.description": "Adjusts indicator visibility.",
+	"config.crosshair-enhancements.vanillaOption.attackIndicator.description": "Changes where the attack indicator is displayed.",
 	"config.crosshair-enhancements.option.hasIndicatorForNonWeapons.name": "Indicator for Non-Weapons",
 	"config.crosshair-enhancements.option.hasIndicatorForNonWeapons.description": "Toggles the full indicator rendering for player hand & other non-weapon items. Also fixes visual glitches with an indicator while having non-vanilla attack speed attribute.",
 	"config.crosshair-enhancements.option.shouldUseResponsiveIndicator.name": "Responsive Indicator",
 	"config.crosshair-enhancements.option.shouldUseResponsiveIndicator.description": "Renders the full indicator as soon as you can land a full-charged hit. Minecraft's minimum charge threshold is 90%.",
-	"config.crosshair-enhancements.vanillaOption.attackIndicator.description": "Changes where the attack indicator is displayed."
+	"config.crosshair-enhancements.option.shouldUseSmoothIndicator.name": "Smooth Indicator",
+	"config.crosshair-enhancements.option.shouldUseSmoothIndicator.description": "Makes the attack indicator charge animation smooth. It is more noticeable while using higher resolution resource packs.",
+	"config.crosshair-enhancements.option.fullIndicatorVisibility.name": "Full Indicator Visibility",
+	"config.crosshair-enhancements.option.fullIndicatorVisibility.description": "Determines when the full attack indicator should be rendered.",
+	"config.crosshair-enhancements.option.fullIndicatorVisibility.alwaysOn": "Always",
+	"config.crosshair-enhancements.option.fullIndicatorVisibility.targeted": "When targeted",
+	"config.crosshair-enhancements.option.fullIndicatorVisibility.never": "Never"
 }

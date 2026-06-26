@@ -3,20 +3,25 @@ package me.catsflex.ce.mixin;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import me.catsflex.ce.config.ModConfig;
 import me.catsflex.ce.util.RenderUtil;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(Gui.class)
-public class AttackIndicatorMixin {
-	@Unique private static final float _MIN_CHARGE_THRESHOLD = 0.9F;
-	@Unique private static final float _FULL_CHARGE = 1.0F;
+public abstract class AttackIndicatorMixin {
+	@Unique
+	private static final float _MIN_CHARGE_THRESHOLD = 0.9F;
+	@Unique
+	private static final float _FULL_CHARGE = 1.0F;
 	
 	@ModifyExpressionValue(
 		method = "renderCrosshair",
@@ -50,6 +55,18 @@ public class AttackIndicatorMixin {
 		// based on the formula (0.2 + f * f * 0.8), where f = 0.9.
 		// This fact is not well-covered on the Minecraft Wiki. The more you know.
 		return originalCharge > _MIN_CHARGE_THRESHOLD ? _FULL_CHARGE : originalCharge;
+	}
+	
+	@ModifyArg(
+		method = "renderCrosshair",
+		at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getAttackStrengthScale(F)F", ordinal = 0)
+	)
+	private float smoothIndicatorCharge(float originalDeltaTicks, @Local(argsOnly = true) DeltaTracker deltaTracker) {
+		final var config = ModConfig.getInstance();
+		if (!config.isEnabled.get() || !config.shouldUseSmoothIndicator.get()) return originalDeltaTicks;
+		
+		// Force the game to use relevant between-tick time (a.k.a. delta/partial ticks) instead of hardcoded 0.0F.
+		return deltaTracker.getGameTimeDeltaTicks();
 	}
 	
 	// Renders both full indicator & indicator background.
