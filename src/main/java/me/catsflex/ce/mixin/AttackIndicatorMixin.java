@@ -8,28 +8,30 @@ import com.mojang.blaze3d.pipeline.RenderPipeline;
 import me.catsflex.ce.config.ModConfig;
 import me.catsflex.ce.util.RenderUtil;
 import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(Gui.class)
 public abstract class AttackIndicatorMixin {
-	@Unique
-	private static final float _MIN_CHARGE_THRESHOLD = 0.9F;
-	@Unique
-	private static final float _FULL_CHARGE = 1.0F;
+	@Unique private static final float _SOMETHING_BIGGER_THAN_5 = Float.MAX_VALUE;
+	@Unique private static final float _MIN_CHARGE_THRESHOLD = 0.9F;
+	@Unique private static final float _FULL_CHARGE = 1.0F;
 	
 	@ModifyExpressionValue(
 		method = "renderCrosshair",
 		at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getCurrentItemAttackStrengthDelay()F")
 	)
 	private float forceIndicatorForNonWeapons(float originalDelay) {
-		final var config = ModConfig.getInstance();
-		if (!config.isEnabled.get() || !config.hasIndicatorForNonWeapons.get()) return originalDelay;
 		
 		// A weird Minecraft quirk.
 		// The game calculates the current item's attack delay in ticks using this formula: MAX_TPS / ATTACK_SPEED.
@@ -38,7 +40,12 @@ public abstract class AttackIndicatorMixin {
 		// If player's attack speed attribute is modified, the game can either show an indicator for non-weapons OR
 		// hide an indicator for weapons which is also a bug.
 		// Return any value > 5.0F to trick the game.
-		return Float.MAX_VALUE;
+		if (isHoldingWeapon()) return _SOMETHING_BIGGER_THAN_5;
+		
+		final var config = ModConfig.getInstance();
+		if (!config.isEnabled.get() || !config.hasIndicatorForNonWeapons.get()) return originalDelay;
+		
+		return _SOMETHING_BIGGER_THAN_5;
 	}
 	
 	@ModifyExpressionValue(
@@ -49,12 +56,7 @@ public abstract class AttackIndicatorMixin {
 		final var config = ModConfig.getInstance();
 		if (!config.isEnabled.get() || !config.shouldUseResponsiveIndicator.get()) return originalCharge;
 		
-		// Minecraft allows to perform full-charged hits,
-		// when the weapon's charge has surpassed 90% (the minimum threshold).
-		// A charge of 90% results in 84.8% of actual damage
-		// based on the formula (0.2 + f * f * 0.8), where f = 0.9.
-		// This fact is not well-covered on the Minecraft Wiki. The more you know.
-		return originalCharge > _MIN_CHARGE_THRESHOLD ? _FULL_CHARGE : originalCharge;
+		return isChargedEnough(originalCharge) ? _FULL_CHARGE : originalCharge;
 	}
 	
 	@ModifyArg(
@@ -67,6 +69,69 @@ public abstract class AttackIndicatorMixin {
 		
 		// Force the game to use relevant between-tick time (a.k.a. delta/partial ticks) instead of hardcoded 0.0F.
 		return deltaTracker.getGameTimeDeltaTicks();
+	}
+	
+	@ModifyVariable(
+		method = "renderCrosshair",
+		at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;guiHeight()I", ordinal = 0),
+		slice = @Slice(
+			from = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getAttackStrengthScale(F)F")
+		)
+	)
+	private boolean applyFullIndicatorVisibility(boolean shouldShowFullIndicator, @Local(ordinal = 0) float charge) {
+		final var config = ModConfig.getInstance();
+		if (!config.isEnabled.get()) return shouldShowFullIndicator;
+		
+		return switch (config.fullIndicatorVisibility.get()) {
+			case NEVER -> false;
+			case TARGETED -> shouldShowFullIndicator;
+			case ALWAYS_ON -> {
+				boolean shouldShowForItem = config.hasIndicatorForNonWeapons.get() || isHoldingWeapon();
+				
+				// Current charge's value is correctly adjusted when using 'Responsive Indicator' option.
+				yield isFullyCharged(charge) && shouldShowForItem;
+			}
+		};
+	}
+	
+	// A better approach for checking whether the current item is a weapon or not.
+	@Unique
+	private boolean isHoldingWeapon() {
+		final var player = Minecraft.getInstance().player;
+		if (player == null) return false;
+		
+		final var mainHandItem = player.getMainHandItem();
+		if (mainHandItem.isEmpty()) return false;
+		
+		final var modifiers = mainHandItem.get(DataComponents.ATTRIBUTE_MODIFIERS);
+		if (modifiers == null) return false;
+		
+		for (final var modifier : modifiers.modifiers()) {
+			final var attribute = modifier.attribute();
+			
+			// If an item has a modified attribute,
+			// it is *probably* a weapon or an item that is supposed to be used as one.
+			if (attribute.equals(Attributes.ATTACK_DAMAGE) || attribute.equals(Attributes.ATTACK_SPEED))
+				return true;
+		}
+		
+		return false;
+	}
+	
+	@Unique
+	private boolean isChargedEnough(float charge) {
+		
+		// Minecraft allows to perform full-charged hits,
+		// when the weapon's charge has surpassed 90% (the minimum threshold).
+		// A charge of 90% results in 84.8% of actual damage
+		// based on the formula (0.2 + f * f * 0.8), where f = 0.9.
+		// This fact is not well-covered on the Minecraft Wiki. The more you know.
+		return charge > _MIN_CHARGE_THRESHOLD;
+	}
+	
+	@Unique
+	private boolean isFullyCharged(float charge) {
+		return charge >= _FULL_CHARGE;
 	}
 	
 	// Renders both full indicator & indicator background.
