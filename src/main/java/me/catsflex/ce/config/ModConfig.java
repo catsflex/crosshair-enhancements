@@ -33,10 +33,10 @@ public class ModConfig {
 	public final FloatOption crosshairOpacity = new FloatOption("crosshairOpacity", 1.0F, 0.0F, 1.0F);
 	public final BooleanOption shouldIndicatorUseBlending = new BooleanOption("shouldIndicatorUseBlending", true);
 	public final FloatOption indicatorOpacity = new FloatOption("indicatorOpacity", 1.0F, 0.0F, 1.0F);
-	public final BooleanOption hasIndicatorForNonWeapons = new BooleanOption("hasIndicatorForNonWeapons", false);
+	public final EnumOption<IndicatorVisibilityStatus> fullIndicatorVisibility = new EnumOption<>("fullIndicatorVisibility", IndicatorVisibilityStatus.TARGETED, IndicatorVisibilityStatus.class);
+	public final BooleanOption shouldShowFullIndicatorForAllItems = new BooleanOption("shouldShowFullIndicatorForAllItems", false);
 	public final BooleanOption shouldUseResponsiveIndicator = new BooleanOption("shouldUseResponsiveIndicator", false);
 	public final BooleanOption shouldUseSmoothIndicator = new BooleanOption("shouldUseSmoothIndicator", false);
-	public final EnumOption<IndicatorVisibilityStatus> fullIndicatorVisibility = new EnumOption<>("fullIndicatorVisibility", IndicatorVisibilityStatus.TARGETED, IndicatorVisibilityStatus.class);
 	
 	private ModConfig() {}
 	

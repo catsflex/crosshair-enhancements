@@ -43,7 +43,7 @@ public abstract class AttackIndicatorMixin {
 		if (isHoldingWeapon()) return _SOMETHING_BIGGER_THAN_5;
 		
 		final var config = ModConfig.getInstance();
-		if (!config.isEnabled.get() || !config.hasIndicatorForNonWeapons.get()) return originalDelay;
+		if (!config.isEnabled.get() || !config.shouldShowFullIndicatorForAllItems.get()) return originalDelay;
 		
 		return _SOMETHING_BIGGER_THAN_5;
 	}
@@ -88,7 +88,7 @@ public abstract class AttackIndicatorMixin {
 			case NEVER -> false;
 			case TARGETED -> shouldShowFullIndicator;
 			case ALWAYS_ON -> {
-				boolean shouldShowForItem = config.hasIndicatorForNonWeapons.get() || isHoldingWeapon();
+				boolean shouldShowForItem = config.shouldShowFullIndicatorForAllItems.get() || isHoldingWeapon();
 				
 				// Current charge's value is correctly adjusted when using 'Responsive Indicator' option.
 				yield isFullyCharged(charge) && shouldShowForItem;

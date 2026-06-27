@@ -65,10 +65,10 @@ public class YACLIntegration {
 					.option(createBooleanTickBoxOption(config.shouldIndicatorUseBlending))
 					.option(createFloatSliderOption(config.indicatorOpacity, 0.01F))
 					.option(attackIndicatorOption)
-					.option(createBooleanTickBoxOption(config.hasIndicatorForNonWeapons))
+					.option(createEnumOption(config.fullIndicatorVisibility, IndicatorVisibilityStatus::getStatus))
+					.option(createBooleanTickBoxOption(config.shouldShowFullIndicatorForAllItems))
 					.option(createBooleanTickBoxOption(config.shouldUseResponsiveIndicator))
 					.option(createBooleanTickBoxOption(config.shouldUseSmoothIndicator))
-					.option(createEnumOption(config.fullIndicatorVisibility, IndicatorVisibilityStatus::getStatus))
 					.build())
 				
 				.build())
