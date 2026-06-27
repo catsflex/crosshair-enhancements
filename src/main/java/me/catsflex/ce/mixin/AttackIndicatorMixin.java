@@ -67,8 +67,10 @@ public abstract class AttackIndicatorMixin {
 		final var config = ModConfig.getInstance();
 		if (!config.isEnabled.get() || !config.shouldUseSmoothIndicator.get()) return originalDeltaTicks;
 		
-		// Force the game to use relevant between-tick time (a.k.a. delta/partial ticks) instead of hardcoded 0.0F.
-		return deltaTracker.getGameTimeDeltaTicks();
+		// Force the game to use the relevant partial tick (the fraction of the current tick)
+		// instead of the hardcoded 0.0F to achieve perfectly smooth animation.
+		// Pass 'true' to keep the animation smooth during tick freeze (via '/tick freeze' command).
+		return deltaTracker.getGameTimeDeltaPartialTick(true);
 	}
 	
 	@ModifyVariable(

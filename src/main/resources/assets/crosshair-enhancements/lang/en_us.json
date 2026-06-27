@@ -30,7 +30,7 @@
 	"config.crosshair-enhancements.option.shouldUseResponsiveIndicator.name": "Responsive Indicator",
 	"config.crosshair-enhancements.option.shouldUseResponsiveIndicator.description": "Renders the full indicator as soon as you can land a full-charged hit. Minecraft's minimum charge threshold is 90%.",
 	"config.crosshair-enhancements.option.shouldUseSmoothIndicator.name": "Smooth Indicator",
-	"config.crosshair-enhancements.option.shouldUseSmoothIndicator.description": "Makes the attack indicator charge animation smooth. It is more noticeable while using higher resolution resource packs.",
+	"config.crosshair-enhancements.option.shouldUseSmoothIndicator.description": "Makes the attack indicator charge animation smooth.",
 	"config.crosshair-enhancements.option.fullIndicatorVisibility.name": "Full Indicator Visibility",
 	"config.crosshair-enhancements.option.fullIndicatorVisibility.description": "Determines when the full attack indicator should be rendered.",
 	"config.crosshair-enhancements.option.fullIndicatorVisibility.alwaysOn": "Always",

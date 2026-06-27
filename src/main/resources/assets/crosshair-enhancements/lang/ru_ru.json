@@ -30,7 +30,7 @@
 	"config.crosshair-enhancements.option.shouldUseResponsiveIndicator.name": "Отзывчивый индикатор",
 	"config.crosshair-enhancements.option.shouldUseResponsiveIndicator.description": "Отображает индикатор полностью заряженным, как только вы можете нанести удар с максимальным уроном. Минимальный порог заряда в Minecraft составляет 90%.",
 	"config.crosshair-enhancements.option.shouldUseSmoothIndicator.name": "Плавный индикатор",
-	"config.crosshair-enhancements.option.shouldUseSmoothIndicator.description": "Делает анимацию заполнения индикатора атаки плавной. Это более заметно при использовании ресурс-паков с высоким разрешением.",
+	"config.crosshair-enhancements.option.shouldUseSmoothIndicator.description": "Делает анимацию заполнения индикатора атаки плавной.",
 	"config.crosshair-enhancements.option.fullIndicatorVisibility.name": "Отображение полного индикатора",
 	"config.crosshair-enhancements.option.fullIndicatorVisibility.description": "Определяет, когда должен отображаться полный индикатор атаки.",
 	"config.crosshair-enhancements.option.fullIndicatorVisibility.alwaysOn": "Всегда",

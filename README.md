@@ -14,7 +14,6 @@ It offers various customizations, quality-of-life improvements, and bug fixes.
 - **Non-Weapons Support**: Forces the full attack indicator to render for empty hands and non-weapon items.
 - **Responsive Indicator**: Renders the indicator as fully charged the exact moment a max-damage hit is possible (when the weapon's charge is at least 90%).
 - **Smooth Indicator**: Interpolates the attack indicator's charging animation to match your client's framerate.
-  This is barely noticeable and somewhat useful for players using 32x or higher resolution resource packs.
 - **Full Indicator Visibility**: Renders or hides the full indicator based on set state.
 - **Centralized Config**: Vanilla options related to either the crosshair or the attack indicator are integrated into the config menu for easier access.
 
