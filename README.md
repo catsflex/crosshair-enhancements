@@ -10,7 +10,7 @@ It offers various customizations, quality-of-life improvements, and bug fixes.
 ## Features
 
 - **Blending & Opacity**: Applies custom blending and opacity settings to both the crosshair and the attack indicator separately.
-- **Visibility Rules**: Renders the crosshair in Third-Person mode, Spectator mode, or in Debug Overlay.
+- **Visibility Rules**: Renders the crosshair in Third-Person mode, Spectator mode, or in Debug Overlay (via F3 key).
 - **Non-Weapons Support**: Forces the full attack indicator to render for empty hands and non-weapon items.
 - **Responsive Indicator**: Renders the indicator as fully charged the exact moment a max-damage hit is possible (when the weapon's charge is at least 90%).
 - **Smooth Indicator**: Interpolates the attack indicator's charging animation to match your client's framerate.
@@ -28,8 +28,8 @@ It offers various customizations, quality-of-life improvements, and bug fixes.
 
 I will go through these later:
 
-- **Show Crosshair in GUIs**: Renders the crosshair when you're in GUIs.
-  Useful for players with transparent menus.
+- **Show Crosshair In Hidden Menus**: Keeps the crosshair visible when HUD is hidden (via F1 key).
+- **Spectator Entity Indicator**: Shows the crosshair and the attack indicator when hovering over an entity.
 
 Stay tuned!
 
