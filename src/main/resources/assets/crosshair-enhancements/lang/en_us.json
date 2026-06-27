@@ -26,7 +26,7 @@
 	"config.crosshair-enhancements.option.indicatorOpacity.description": "Adjusts indicator visibility.",
 	"config.crosshair-enhancements.vanillaOption.attackIndicator.description": "Changes where the attack indicator is displayed.",
 	"config.crosshair-enhancements.option.hasIndicatorForNonWeapons.name": "Indicator for Non-Weapons",
-	"config.crosshair-enhancements.option.hasIndicatorForNonWeapons.description": "Toggles the full indicator rendering for player hand & other non-weapon items. Also fixes visual glitches with an indicator while having non-vanilla attack speed attribute.",
+	"config.crosshair-enhancements.option.hasIndicatorForNonWeapons.description": "Toggles the full indicator rendering for player hand & other non-weapon items.",
 	"config.crosshair-enhancements.option.shouldUseResponsiveIndicator.name": "Responsive Indicator",
 	"config.crosshair-enhancements.option.shouldUseResponsiveIndicator.description": "Renders the full indicator as soon as you can land a full-charged hit. Minecraft's minimum charge threshold is 90%.",
 	"config.crosshair-enhancements.option.shouldUseSmoothIndicator.name": "Smooth Indicator",

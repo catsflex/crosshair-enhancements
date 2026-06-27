@@ -26,7 +26,7 @@
 	"config.crosshair-enhancements.option.indicatorOpacity.description": "Настраивает видимость индикатора атаки.",
 	"config.crosshair-enhancements.vanillaOption.attackIndicator.description": "Меняет место, где отображается индикатор атаки.",
 	"config.crosshair-enhancements.option.hasIndicatorForNonWeapons.name": "Индикатор для предметов без урона",
-	"config.crosshair-enhancements.option.hasIndicatorForNonWeapons.description": "Отображает полный индикатор атаки для пустой руки и предметов, не являющихся оружием. Также исправляет визуальные баги индикатора при нестандартных значениях атрибута скорости атаки.",
+	"config.crosshair-enhancements.option.hasIndicatorForNonWeapons.description": "Отображает полный индикатор атаки для пустой руки и предметов, не являющихся оружием.",
 	"config.crosshair-enhancements.option.shouldUseResponsiveIndicator.name": "Отзывчивый индикатор",
 	"config.crosshair-enhancements.option.shouldUseResponsiveIndicator.description": "Отображает индикатор полностью заряженным, как только вы можете нанести удар с максимальным уроном. Минимальный порог заряда в Minecraft составляет 90%.",
 	"config.crosshair-enhancements.option.shouldUseSmoothIndicator.name": "Плавный индикатор",
