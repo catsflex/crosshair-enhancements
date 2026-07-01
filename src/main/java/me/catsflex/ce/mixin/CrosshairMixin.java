@@ -1,11 +1,11 @@
 package me.catsflex.ce.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import me.catsflex.ce.config.ModConfig;
+import me.catsflex.ce.util.PlayerUtil;
 import me.catsflex.ce.util.RenderUtil;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
@@ -30,24 +30,11 @@ public abstract class CrosshairMixin {
 		method = "renderCrosshair",
 		at = @At(value = "INVOKE", target = "Lnet/minecraft/client/CameraType;isFirstPerson()Z")
 	)
-	private boolean bypassFirstPersonCheck(boolean isFirstPerson) {
+	private boolean allowCrosshairInThirdPerson(boolean originalIsFirstPerson) {
 		final var config = ModConfig.getInstance();
-		if (!config.isEnabled.get()) return isFirstPerson;
+		if (!config.isEnabled.get() || !config.shouldShowInThirdPerson.get()) return originalIsFirstPerson;
 		
-		// Make the game think we're ALWAYS in first person mode & render the crosshair.
-		return isFirstPerson || config.shouldShowInThirdPerson.get();
-	}
-	
-	@ModifyReturnValue(
-		method = "canRenderCrosshairForSpectator",
-		at = @At("RETURN")
-	)
-	private boolean bypassSpectatorCheck(boolean canRender) {
-		final var config = ModConfig.getInstance();
-		if (!config.isEnabled.get()) return canRender;
-		
-		// Make the game think it should ALWAYS render the crosshair in spectator game mode.
-		return canRender || config.shouldShowInSpectator.get();
+		return true;
 	}
 	
 	@Inject(
@@ -55,11 +42,11 @@ public abstract class CrosshairMixin {
 		at = @At("HEAD"),
 		cancellable = true
 	)
-	private void allowEntityCrosshairInSpectator(HitResult hitResult, CallbackInfoReturnable<Boolean> cir) {
+	private void allowCrosshairInSpectator(HitResult hitResult, CallbackInfoReturnable<Boolean> cir) {
 		final var config = ModConfig.getInstance();
-		if (!config.isEnabled.get() || !config.shouldShowInSpectator.get()) return;
+		if (!config.isEnabled.get()) return;
 		
-		if (hitResult == null || hitResult.getType() != HitResult.Type.ENTITY) return;
+		if (!config.shouldShowInSpectator.get() && !PlayerUtil.isLookingAtEntity(hitResult)) return;
 		
 		cir.setReturnValue(true);
 	}
@@ -75,7 +62,6 @@ public abstract class CrosshairMixin {
 			return;
 		}
 		
-		guiGraphics.nextStratum();
 		guiGraphics.pose().pushMatrix();
 		
 		correctlyCenterCrosshair(guiGraphics);
@@ -85,7 +71,7 @@ public abstract class CrosshairMixin {
 	}
 	
 	@Unique
-	private void correctlyCenterCrosshair(GuiGraphics guiGraphics) {
+	private static void correctlyCenterCrosshair(GuiGraphics guiGraphics) {
 		final float screenCenterX = guiGraphics.guiWidth() / 2.0F;
 		final float screenCenterY = guiGraphics.guiHeight() / 2.0F;
 		

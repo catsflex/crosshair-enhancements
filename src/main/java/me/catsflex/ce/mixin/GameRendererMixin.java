@@ -11,13 +11,12 @@ public abstract class GameRendererMixin {
 	
 	@ModifyExpressionValue(
 		method = "renderLevel",
-		at = @At(value = "INVOKE", target = "Lnet/minecraft/client/CameraType;isFirstPerson()Z")
+		at = @At(value = "INVOKE", target = "Lnet/minecraft/client/CameraType;isFirstPerson()Z", ordinal = 0)
 	)
-	private boolean bypassFirstPersonCheck(boolean isFirstPerson) {
+	private boolean allowDebugCrosshairInThirdPerson(boolean originalIsFirstPerson) {
 		final var config = ModConfig.getInstance();
-		if (!config.isEnabled.get()) return isFirstPerson;
+		if (!config.isEnabled.get() || !config.shouldShowInThirdPerson.get()) return originalIsFirstPerson;
 		
-		// Same logic as during crosshair rendering.
-		return isFirstPerson || config.shouldShowInThirdPerson.get();
+		return true;
 	}
 }
