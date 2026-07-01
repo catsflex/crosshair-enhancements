@@ -14,6 +14,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.phys.HitResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,6 +33,8 @@ public abstract class AttackIndicatorMixin {
 		at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getCurrentItemAttackStrengthDelay()F")
 	)
 	private float forceIndicatorForNonWeapons(float originalDelay) {
+		final var config = ModConfig.getInstance();
+		if (!config.isEnabled.get()) return originalDelay;
 		
 		// A weird Minecraft quirk.
 		// The game calculates the current item's attack delay in ticks using this formula: MAX_TPS / ATTACK_SPEED.
@@ -42,8 +45,7 @@ public abstract class AttackIndicatorMixin {
 		// Return any value > 5.0F to trick the game.
 		if (isHoldingWeapon()) return _SOMETHING_BIGGER_THAN_5;
 		
-		final var config = ModConfig.getInstance();
-		if (!config.isEnabled.get() || !config.shouldShowFullIndicatorForAllItems.get()) return originalDelay;
+		if (!config.shouldShowFullIndicatorForAllItems.get()) return originalDelay;
 		
 		return _SOMETHING_BIGGER_THAN_5;
 	}
@@ -151,6 +153,8 @@ public abstract class AttackIndicatorMixin {
 			return;
 		}
 		
+		if (isMining()) return;
+		
 		RenderUtil.renderSprite(guiGraphics, sprite, x, y, width, height, config.shouldIndicatorUseBlending.get(), config.indicatorOpacity.get());
 	}
 	
@@ -172,6 +176,18 @@ public abstract class AttackIndicatorMixin {
 			return;
 		}
 		
+		if (isMining()) return;
+		
 		RenderUtil.renderSprite(guiGraphics, sprite, sourceWidth, sourceHeight, cropX, cropY, screenX, screenY, renderWidth, renderHeight, config.shouldIndicatorUseBlending.get(), config.indicatorOpacity.get());
+	}
+	
+	@Unique
+	private boolean isMining() {
+		final var client = Minecraft.getInstance();
+		if (client.player == null) return false;
+		
+		return client.options.keyAttack.isDown() &&
+			client.hitResult != null &&
+			client.hitResult.getType() == HitResult.Type.BLOCK;
 	}
 }

@@ -17,19 +17,20 @@ It offers various customizations, quality-of-life improvements, and bug fixes.
 - **Smooth Indicator**: Interpolates the attack indicator's charging animation to match your client's framerate.
 - **Centralized Config**: Vanilla options related to either the crosshair or the attack indicator are integrated into the config menu for easier access.
 
-## Bug fixes
+## Bug fixes // QoL changes
 
 - **Centered Crosshair Fix**: Resolves the vanilla bug where the crosshair renders slightly off-center.
   To fix an off-center attack indicator, use my [Centered Full Indicator Fix](https://modrinth.com/resourcepack/centered-full-indicator-fix) pack.
 - **Full Indicator Rendering Fix**: Resolves the vanilla logic bug with full attack indicator being rendered in situations where it shouldn't or the other way around.
   The full indicator was intended to be rendered for weapons (items with attack speed and attack damage attributes) exclusively.
+- **Mining Indicator Fix**: Stops rendering the attack indicator while mining.
+  Seeing one is very misleading.
 
 ## Planned features
 
 I will go through these later:
 
 - **Show Crosshair In Hidden Menus**: Keeps the crosshair visible when HUD is hidden (via F1 key).
-- **Spectator Entity Indicator**: Shows the crosshair and the attack indicator when hovering over an entity.
 
 Stay tuned!
 

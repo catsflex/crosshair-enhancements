@@ -10,11 +10,14 @@ import me.catsflex.ce.util.RenderUtil;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.phys.HitResult;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Gui.class)
 public abstract class CrosshairMixin {
@@ -45,6 +48,20 @@ public abstract class CrosshairMixin {
 		
 		// Make the game think it should ALWAYS render the crosshair in spectator game mode.
 		return canRender || config.shouldShowInSpectator.get();
+	}
+	
+	@Inject(
+		method = "canRenderCrosshairForSpectator",
+		at = @At("HEAD"),
+		cancellable = true
+	)
+	private void allowEntityCrosshairInSpectator(HitResult hitResult, CallbackInfoReturnable<Boolean> cir) {
+		final var config = ModConfig.getInstance();
+		if (!config.isEnabled.get() || !config.shouldShowInSpectator.get()) return;
+		
+		if (hitResult == null || hitResult.getType() != HitResult.Type.ENTITY) return;
+		
+		cir.setReturnValue(true);
 	}
 	
 	@WrapOperation(
