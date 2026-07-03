@@ -65,7 +65,7 @@ public abstract class CrosshairMixin {
 			target = "Lnet/minecraft/client/gui/Gui;renderSleepOverlay(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/client/DeltaTracker;)V"
 		)
 	)
-	private void allowCrosshairWithHudHidden(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+	private void allowCrosshairWithHiddenHud(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
 		final var config = ModConfig.getInstance();
 		if (!config.isEnabled.get() || !config.shouldShowWithHiddenHud.get()) return;
 		
