@@ -29,6 +29,7 @@ public class ModConfig {
 	public final BooleanOption isEnabled = new BooleanOption("isEnabled", true);
 	public final BooleanOption shouldShowInThirdPerson = new BooleanOption("shouldShowInThirdPerson", false);
 	public final BooleanOption shouldShowInSpectator = new BooleanOption("shouldShowInSpectator", false);
+	public final BooleanOption shouldShowWithHiddenHud = new BooleanOption("shouldShowWithHiddenHud", false);
 	public final BooleanOption shouldCrosshairUseBlending = new BooleanOption("shouldCrosshairUseBlending", true);
 	public final FloatOption crosshairOpacity = new FloatOption("crosshairOpacity", 1.0F, 0.0F, 1.0F);
 	public final BooleanOption shouldIndicatorUseBlending = new BooleanOption("shouldIndicatorUseBlending", true);

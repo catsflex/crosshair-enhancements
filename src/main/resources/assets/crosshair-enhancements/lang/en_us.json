@@ -11,6 +11,8 @@
 	"config.crosshair-enhancements.option.shouldShowInThirdPerson.description": "Renders the crosshair while you're in third person mode.",
 	"config.crosshair-enhancements.option.shouldShowInSpectator.name": "Spectator Crosshair",
 	"config.crosshair-enhancements.option.shouldShowInSpectator.description": "Renders the crosshair while you're in spectator mode.",
+	"config.crosshair-enhancements.option.shouldShowWithHiddenHud.name": "Show with Hidden HUD",
+	"config.crosshair-enhancements.option.shouldShowWithHiddenHud.description": "Keeps the crosshair visible even when the HUD is hidden.",
 	"config.crosshair-enhancements.debugOverlayOption.debugCrosshair.name": "Debug Crosshair Visibility",
 	"config.crosshair-enhancements.debugOverlayOption.debugCrosshair.description": "Determines when the 3D crosshair should be rendered instead of a vanilla one.",
 	"config.crosshair-enhancements.debugOverlayOption.debugCrosshair.alwaysOn": "Always",

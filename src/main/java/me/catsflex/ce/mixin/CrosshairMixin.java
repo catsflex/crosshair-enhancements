@@ -7,6 +7,8 @@ import com.mojang.blaze3d.pipeline.RenderPipeline;
 import me.catsflex.ce.config.ModConfig;
 import me.catsflex.ce.util.PlayerUtil;
 import me.catsflex.ce.util.RenderUtil;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.Identifier;
@@ -17,6 +19,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Gui.class)
@@ -25,6 +28,10 @@ public abstract class CrosshairMixin {
 	@Unique private static final float _HALF_CROSSHAIR_SIZE = _CROSSHAIR_SIZE / 2.0F;
 	
 	@Shadow @Final private static Identifier CROSSHAIR_SPRITE;
+	@Shadow @Final private Minecraft minecraft;
+	
+	@Shadow
+	protected abstract void renderCrosshair(GuiGraphics guiGraphics, DeltaTracker deltaTracker);
 	
 	@ModifyExpressionValue(
 		method = "renderCrosshair",
@@ -49,6 +56,22 @@ public abstract class CrosshairMixin {
 		if (!config.shouldShowInSpectator.get() && !PlayerUtil.isLookingAtEntity(hitResult)) return;
 		
 		cir.setReturnValue(true);
+	}
+	
+	@Inject(
+		method = "render",
+		at = @At(
+			value = "INVOKE",
+			target = "Lnet/minecraft/client/gui/Gui;renderSleepOverlay(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/client/DeltaTracker;)V"
+		)
+	)
+	private void allowCrosshairWithHudHidden(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+		final var config = ModConfig.getInstance();
+		if (!config.isEnabled.get() || !config.shouldShowWithHiddenHud.get()) return;
+		
+		if (!minecraft.options.hideGui) return;
+		
+		renderCrosshair(guiGraphics, deltaTracker);
 	}
 	
 	@WrapOperation(

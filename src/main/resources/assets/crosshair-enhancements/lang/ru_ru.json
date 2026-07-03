@@ -11,6 +11,8 @@
 	"config.crosshair-enhancements.option.shouldShowInThirdPerson.description": "Отображает прицел в режиме от третьего лица.",
 	"config.crosshair-enhancements.option.shouldShowInSpectator.name": "Прицел в режиме наблюдателя",
 	"config.crosshair-enhancements.option.shouldShowInSpectator.description": "Отображает прицел в режиме наблюдателя.",
+	"config.crosshair-enhancements.option.shouldShowWithHiddenHud.name": "Прицел в режиме без интерфейса",
+	"config.crosshair-enhancements.option.shouldShowWithHiddenHud.description": "Отображает прицел, даже если интерфейс скрыт.",
 	"config.crosshair-enhancements.debugOverlayOption.debugCrosshair.name": "Отображение отладочного прицела",
 	"config.crosshair-enhancements.debugOverlayOption.debugCrosshair.description": "Определяет, когда должен отображаться 3D-прицел вместо стандартного.",
 	"config.crosshair-enhancements.debugOverlayOption.debugCrosshair.alwaysOn": "Всегда",

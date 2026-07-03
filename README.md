@@ -23,8 +23,10 @@ It offers various customizations, quality-of-life improvements, and bug fixes.
   To fix an off-center attack indicator, use my [Centered Full Indicator Fix](https://modrinth.com/resourcepack/centered-full-indicator-fix) pack.
 - **Full Indicator Rendering Fix**: Resolves the vanilla logic bug with full attack indicator being rendered in situations where it shouldn't or the other way around.
   The full indicator was intended to be rendered for weapons (items with attack speed and attack damage attributes) exclusively.
-- **Mining Indicator Fix**: Stops rendering the attack indicator while mining.
+- **Hide Mining Indicator**: Stops rendering the attack indicator while mining.
   Seeing one is very misleading.
+- **Spectator Entity Crosshair**: Renders the crosshair when looking at entities in spectator mode.
+  Used to be a vanilla logic in older Minecraft versions.
 
 ## Planned features
 

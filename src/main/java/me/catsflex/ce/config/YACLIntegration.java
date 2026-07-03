@@ -53,6 +53,7 @@ public class YACLIntegration {
 				.group(createGroup("common")
 					.option(createBooleanTickBoxOption(config.shouldShowInThirdPerson))
 					.option(createBooleanTickBoxOption(config.shouldShowInSpectator))
+					.option(createBooleanTickBoxOption(config.shouldShowWithHiddenHud))
 					.option(debugCrosshairOption)
 					.build())
 				
