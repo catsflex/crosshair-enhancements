@@ -43,7 +43,7 @@ public abstract class AttackIndicatorMixin {
 	}
 	
 	@ModifyExpressionValue(
-		method = "renderCrosshair",
+		method = { "renderCrosshair", "renderItemHotbar" },
 		at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getAttackStrengthScale(F)F", ordinal = 0)
 	)
 	private float applyResponsiveIndicator(float originalCharge) {
@@ -56,7 +56,7 @@ public abstract class AttackIndicatorMixin {
 	}
 	
 	@ModifyArg(
-		method = "renderCrosshair",
+		method = { "renderCrosshair", "renderItemHotbar" },
 		at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getAttackStrengthScale(F)F", ordinal = 0)
 	)
 	private float smoothIndicatorAnimation(float originalDeltaTicks, @Local(argsOnly = true) DeltaTracker deltaTracker) {
