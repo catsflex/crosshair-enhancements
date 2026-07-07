@@ -4,37 +4,44 @@ import com.google.gson.JsonObject;
 
 import java.awt.*;
 
-public class ColorOption extends ConfigOption {
-	private Color _currentValue;
-	private final Color _defaultValue;
+public final class ColorOption extends ConfigOption<Color> {
+	
+	// Optimization purposes.
+	private int currentARGBValue;
+	private final int defaultARGBValue;
 	
 	public ColorOption(String key, Color defaultValue) {
-		super(key);
-		_currentValue = defaultValue;
-		_defaultValue = defaultValue;
+		super(key, defaultValue);
+		
+		final int argb = defaultValue.getRGB();
+		this.currentARGBValue = argb;
+		this.defaultARGBValue = argb;
 	}
 	
-	public Color get() {
-		return _currentValue;
+	public int getAsInt() {
+		return currentARGBValue;
 	}
 	
+	public int getDefaultAsInt() {
+		return defaultARGBValue;
+	}
+	
+	@Override
 	public void set(Color value) {
-		_currentValue = value;
-	}
-	
-	public Color getDefault() {
-		return _defaultValue;
+		super.set(value);
+		
+		currentARGBValue = value.getRGB();
 	}
 	
 	@Override
 	public void read(JsonObject json) {
-		if (!json.has(_key)) return;
+		if (!json.has(getKey())) return;
 		
 		// Skip the '#' character.
-		var hex = json.get(_key).getAsString().substring(1);
+		final var hex = json.get(getKey()).getAsString().substring(1);
 		
 		try {
-			int argb = Integer.parseUnsignedInt(hex, 16);
+			final int argb = Integer.parseUnsignedInt(hex, 16);
 			set(new Color(argb, true));
 		} catch (NumberFormatException e) {
 			// Ignore the incorrect value.
@@ -43,6 +50,6 @@ public class ColorOption extends ConfigOption {
 	
 	@Override
 	public void write(JsonObject json) {
-		json.addProperty(_key, String.format("#%08X", _currentValue.getRGB()));
+		json.addProperty(getKey(), String.format("#%08X", getAsInt()));
 	}
 }

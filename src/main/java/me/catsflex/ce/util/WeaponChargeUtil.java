@@ -3,11 +3,13 @@ package me.catsflex.ce.util;
 import me.catsflex.ce.config.ModConfig;
 import org.spongepowered.asm.mixin.Unique;
 
-public abstract class WeaponChargeUtil {
+public final class WeaponChargeUtil {
 	public static final float FORCE_HIDE_VALUE = Float.MIN_VALUE;
 	public static final float FORCE_RENDER_VALUE = Float.MAX_VALUE;
 	public static final float MIN_CHARGE_THRESHOLD = 0.9F;
 	public static final float FULL_CHARGE = 1.0F;
+	
+	private WeaponChargeUtil() {}
 	
 	@Unique
 	public static boolean isChargedEnough(float charge) {

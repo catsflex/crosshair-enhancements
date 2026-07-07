@@ -6,7 +6,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class PlayerUtil {
+public final class PlayerUtil {
+	private PlayerUtil() {}
 	
 	// A better approach for checking whether the current item is a weapon or not.
 	public static boolean isHoldingWeapon() {

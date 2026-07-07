@@ -6,7 +6,8 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 
-public abstract class RenderUtil {
+public final class RenderUtil {
+	private RenderUtil() {}
 	
 	public static void renderSprite(
 		GuiGraphics guiGraphics, Identifier sprite,

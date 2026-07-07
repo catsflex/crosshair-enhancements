@@ -1,17 +1,27 @@
 package me.catsflex.ce.config.custom;
 
-public enum IndicatorVisibilityStatus {
+import me.catsflex.ce.config.gui.ConfigKeyType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.StringRepresentable;
+import org.jspecify.annotations.NonNull;
+
+public enum IndicatorVisibilityStatus implements StringRepresentable {
 	ALWAYS_ON("alwaysOn"),
 	TARGETED("targeted"),
 	NEVER("never");
 	
-	private final String _status;
+	private final String status;
 	
 	IndicatorVisibilityStatus(String status) {
-		_status = status;
+		this.status = status;
 	}
 	
-	public String getStatus() {
-		return _status;
+	@Override
+	public @NonNull String getSerializedName() {
+		return status;
+	}
+	
+	public Component getComponent() {
+		return Component.translatable(ConfigKeyType.getEnumKey(this));
 	}
 }

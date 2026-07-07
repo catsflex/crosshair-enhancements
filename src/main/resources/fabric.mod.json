@@ -20,7 +20,7 @@
 			"me.catsflex.${mod_package_id}.Main"
 		],
 		"modmenu": [
-			"me.catsflex.${mod_package_id}.config.ModMenuIntegration"
+			"me.catsflex.${mod_package_id}.config.gui.ModMenuIntegration"
 		]
 	},
 	"mixins": [

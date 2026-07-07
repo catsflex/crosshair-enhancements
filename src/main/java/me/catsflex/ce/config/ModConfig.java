@@ -17,14 +17,14 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModConfig {
+public final class ModConfig {
 	
 	// Config saving stuff.
-	private static final Gson _GSON = new GsonBuilder().setPrettyPrinting().create();
-	private static final String _CONFIG_NAME = Main.MOD_ID + ".json";
-	private static final Path _CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve(_CONFIG_NAME);
-	private static final List<ConfigOption> _ALL_OPTIONS = new ArrayList<>();
-	private static final ModConfig _instance = new ModConfig();
+	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+	private static final String CONFIG_NAME = Main.MOD_ID + ".json";
+	private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve(CONFIG_NAME);
+	private static final List<ConfigOption<?>> OPTIONS = new ArrayList<>();
+	private static final ModConfig INSTANCE = new ModConfig();
 	
 	public final BooleanOption isEnabled = new BooleanOption("isEnabled", true);
 	public final BooleanOption shouldShowInThirdPerson = new BooleanOption("shouldShowInThirdPerson", false);
@@ -42,27 +42,27 @@ public class ModConfig {
 	private ModConfig() {}
 	
 	public static ModConfig getInstance() {
-		return _instance;
+		return INSTANCE;
 	}
 	
-	public static void registerOption(ConfigOption option) {
-		_ALL_OPTIONS.add(option);
+	public static void registerOption(ConfigOption<?> option) {
+		OPTIONS.add(option);
 	}
 	
 	public void load() {
-		if (!Files.exists(_CONFIG_PATH)) {
+		if (!Files.exists(CONFIG_PATH)) {
 			save();
 			return;
 		}
 		
-		try (var reader = Files.newBufferedReader(_CONFIG_PATH)) {
+		try (var reader = Files.newBufferedReader(CONFIG_PATH)) {
 			var element = JsonParser.parseReader(reader);
 			if (!element.isJsonObject()) {
 				throw new IllegalStateException("Config root is not a JSON object!");
 			}
 			
 			var json = element.getAsJsonObject();
-			for (var option : _ALL_OPTIONS) {
+			for (var option : OPTIONS) {
 				option.read(json);
 			}
 			
@@ -75,12 +75,12 @@ public class ModConfig {
 	public void save() {
 		var json = new JsonObject();
 		
-		for (var option : _ALL_OPTIONS) {
+		for (var option : OPTIONS) {
 			option.write(json);
 		}
 		
-		try (var writer = Files.newBufferedWriter(_CONFIG_PATH)) {
-			_GSON.toJson(json, writer);
+		try (var writer = Files.newBufferedWriter(CONFIG_PATH)) {
+			GSON.toJson(json, writer);
 		} catch (Exception e) {
 			Main.LOGGER.warn("Failed to save config!", e);
 		}
