@@ -1,6 +1,7 @@
 package me.catsflex.ce.config.gui;
 
 import me.catsflex.ce.Main;
+import net.minecraft.client.gui.components.debug.DebugScreenEntryStatus;
 import net.minecraft.util.StringRepresentable;
 
 public enum ConfigKeyType {
@@ -38,11 +39,17 @@ public enum ConfigKeyType {
 	}
 	
 	public static <T extends Enum<T>> String getEnumKey(T value) {
-		var enumClassName = value.getDeclaringClass().getSimpleName();
+		var enumClassName = getUnobfuscatedEnumName(value);
 		var valueName = (value instanceof StringRepresentable sr)
 			? sr.getSerializedName()
 			: value.name();
 		
 		return PREFIX + "." + ENUM + "." + enumClassName + "." + valueName;
+	}
+	
+	private static <T extends Enum<T>> String getUnobfuscatedEnumName(T value) {
+		if (value instanceof DebugScreenEntryStatus) return "DebugScreenEntryStatus";
+		
+		return value.getDeclaringClass().getSimpleName();
 	}
 }
