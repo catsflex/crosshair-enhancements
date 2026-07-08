@@ -42,7 +42,7 @@ Stay tuned!
 ## Important
 
 - The only attack indicator supported is the crosshair one.
-  I don't think I'll ever support an inventory indicator.
+  A hotbar indicator is only partially supported.
 - I encourage you not to use this mod alongside other crosshair-related mods.
   This action might result in a visual bug or even a crash.
   I try my best to implement relevant tweaks.
